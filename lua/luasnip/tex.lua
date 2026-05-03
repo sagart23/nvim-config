@@ -112,6 +112,257 @@ table.insert(tex, s(
     fmta("\\begin{align*}\n\t<>\n\\end{align*}", { i(1) })
 ))
 
+-- ---------------------------------------------------------------------------
+-- BOXES  (sagar-boxes.sty custom environments)
+-- ---------------------------------------------------------------------------
+
+-- definition box
+table.insert(tex, s(
+    { trig = "bbox-def", name = "Definition box" },
+    fmta("\\begin{definition}{<>}\n\t<>\n\\end{definition}", { i(1, "Title"), i(0) })
+))
+
+-- theorem box
+table.insert(tex, s(
+    { trig = "bbox-thm", name = "Theorem box" },
+    fmta("\\begin{theorem}{<>}\n\t<>\n\\end{theorem}", { i(1, "Title"), i(0) })
+))
+
+-- example box with optional solution inside
+table.insert(tex, s(
+    { trig = "bbox-eg", name = "Example box" },
+    fmta("\\begin{example}{<>}\n\t<>\n\t\\begin{Mysolutionbox}\n\t\t<>\n\t\\end{Mysolutionbox}\n\\end{example}", {
+        i(1, "Title"), i(2, "Question"), i(0)
+    })
+))
+
+-- example box without solution
+table.insert(tex, s(
+    { trig = "bbox-egx", name = "Example box (no solution)" },
+    fmta("\\begin{example}{<>}\n\t<>\n\\end{example}", { i(1, "Title"), i(0) })
+))
+
+-- note box
+table.insert(tex, s(
+    { trig = "bbox-note", name = "Note box" },
+    fmta("\\begin{noteBox}\n\t<>\n\\end{noteBox}", { i(0) })
+))
+
+-- important box
+table.insert(tex, s(
+    { trig = "bbox-imp", name = "Important box" },
+    fmta("\\begin{important}\n\t<>\n\\end{important}", { i(0) })
+))
+
+-- error box
+table.insert(tex, s(
+    { trig = "bbox-err", name = "Error/Common mistake box" },
+    fmta("\\begin{errorbox}\n\tDo NOT write: $<>$\n\\end{errorbox}", { i(0) })
+))
+
+-- solution box
+table.insert(tex, s(
+    { trig = "bbox-sol", name = "Solution box" },
+    fmta("\\begin{Mysolutionbox}\n\t<>\n\\end{Mysolutionbox}", { i(0) })
+))
+
+-- answer box
+table.insert(tex, s(
+    { trig = "bbox-ans", name = "Answer box" },
+    fmta("\\begin{Answer}\n\t<>\n\\end{Answer}", { i(0) })
+))
+
+-- hint box
+table.insert(tex, s(
+    { trig = "bbox-hint", name = "Hint box" },
+    fmta("\\begin{hintbox}\n\t<>\n\\end{hintbox}", { i(0) })
+))
+
+-- teaching tip box
+table.insert(tex, s(
+    { trig = "bbox-tip", name = "Teaching tip box" },
+    fmta("\\begin{teachingtip}\n\t<>\n\\end{teachingtip}", { i(0) })
+))
+
+-- choice node version: pick any box type from one trigger
+table.insert(tex, s(
+    { trig = "bbox", name = "Box chooser" },
+    fmta("\\begin{<>}\n\t<>\n\\end{<>}", {
+        c(1, {
+            t("noteBox"),
+            t("important"),
+            t("errorbox"),
+            t("teachingtip"),
+            t("hintbox"),
+            t("Mysolutionbox"),
+            t("Answer"),
+        }),
+        i(2),
+        f(function(args) return args[1][1] end, { 1 }),
+    })
+))
+
+-- ---------------------------------------------------------------------------
+-- ENVIRONMENTS
+-- ---------------------------------------------------------------------------
+
+-- center
+table.insert(tex, s(
+    { trig = "envcentre", name = "Center environment" },
+    fmta("\\begin{center}\n\t<>\n\\end{center}", { i(0) })
+))
+
+-- parts  (exam.cls)
+table.insert(tex, s(
+    { trig = "envparts", name = "Parts environment" },
+    fmta("\\begin{parts}\n\t\\part[<>] <> \\droppoints\n\\end{parts}", { i(1, "4"), i(0) })
+))
+
+-- subparts  (exam.cls)
+table.insert(tex, s(
+    { trig = "envsubparts", name = "Subparts environment" },
+    fmta("\\begin{subparts}\n\t\\subpart[<>] <>\n\\end{subparts}", { i(1, "2"), i(0) })
+))
+
+-- tikzpicture standalone
+table.insert(tex, s(
+    { trig = "envtikz", name = "tikzpicture environment" },
+    fmta("\\begin{tikzpicture}\n\t<>\n\\end{tikzpicture}", { i(0) })
+))
+
+-- tikzpicture inside figure
+table.insert(tex, s(
+    { trig = "envtikzfig", name = "tikzpicture in figure" },
+    fmta([[
+\begin{figure}[<>]
+    \centering
+    \begin{tikzpicture}
+        <>
+    \end{tikzpicture}
+    \caption{<>}
+    \label{fig:<>}
+\end{figure}]], { i(1, "ht"), i(0), i(2, "Caption"), i(3, "label") })
+))
+
+-- axis / pgfplots inside tikzpicture
+table.insert(tex, s(
+    { trig = "envaxis", name = "pgfplots axis" },
+    fmta([[
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines = middle,
+        xlabel = {$<>$},
+        ylabel = {$<>$},
+        xmin = <>, xmax = <>,
+        ymin = <>, ymax = <>,
+        samples = 200,
+        grid = major,
+    ]
+        \addplot[<>]{<>};
+    \end{axis}
+\end{tikzpicture}]], {
+        i(1, "x"), i(2, "y"),
+        i(3, "-5"), i(4, "5"),
+        i(5, "-2"), i(6, "10"),
+        i(7, "blue, thick"), i(8, "x^2"),
+    })
+))
+
+-- multicols
+table.insert(tex, s(
+    { trig = "envcols", name = "Multicols" },
+    fmta("\\begin{multicols}{<>}\n\t<>\n\\end{multicols}", { i(1, "2"), i(0) })
+))
+
+-- minipage
+table.insert(tex, s(
+    { trig = "envmini", name = "Minipage" },
+    fmta("\\begin{minipage}{<>\\textwidth}\n\t<>\n\\end{minipage}", { i(1, "0.5"), i(0) })
+))
+
+-- two minipages side by side
+table.insert(tex, s(
+    { trig = "envmini2", name = "Two minipages side by side" },
+    fmta([[
+\begin{minipage}{<>\textwidth}
+    <>
+\end{minipage}%
+\hfill
+\begin{minipage}{<>\textwidth}
+    <>
+\end{minipage}]], { i(1, "0.48"), i(2), i(3, "0.48"), i(0) })
+))
+
+-- questions  (exam.cls)
+table.insert(tex, s(
+    { trig = "envquestions", name = "Questions environment" },
+    fmta("\\begin{questions}\n\t\\question[<>] <> \\droppoints\n\\end{questions}", { i(1, "4"), i(0) })
+))
+
+-- oneparchoices  (exam.cls MCQ)
+table.insert(tex, s(
+    { trig = "envchoices", name = "MCQ oneparchoices" },
+    fmta([[
+\begin{oneparchoices}
+    \choice <>
+    \choice <>
+    \choice <>
+    \choice <>
+\end{oneparchoices}]], { i(1, "A"), i(2, "B"), i(3, "C"), i(4, "D") })
+))
+
+-- tabular
+table.insert(tex, s(
+    { trig = "envtab", name = "Tabular" },
+    fmta("\\begin{tabular}{<>}\n\t\\toprule\n\t<> \\\\\\\\\n\t\\midrule\n\t<> \\\\\\\\\n\t\\bottomrule\n\\end{tabular}", {
+        i(1, "c c c"), i(2, "H1 & H2 & H3"), i(0)
+    })
+))
+
+-- ---------------------------------------------------------------------------
+-- FLAGS  (sagar-notes.sty)
+-- ---------------------------------------------------------------------------
+
+-- \hint{}
+table.insert(tex, s(
+    { trig = "flhint", name = "Hint flag" },
+    fmta("\\hint{<>}", { i(0) })
+))
+
+-- \ans{}
+table.insert(tex, s(
+    { trig = "flans", name = "Answer flag" },
+    fmta("\\ans{<>}", { i(0) })
+))
+
+-- \trs{}  teacher-only
+table.insert(tex, s(
+    { trig = "fltrs", name = "Teacher-only flag" },
+    fmta("\\trs{<>}", { i(0) })
+))
+
+-- \teacheronly{} inline
+table.insert(tex, s(
+    { trig = "fltonly", name = "teacheronly inline" },
+    fmta("\\teacheronly{<>}", { i(0) })
+))
+
+-- \answeronly{} inline
+table.insert(tex, s(
+    { trig = "flaonly", name = "answeronly inline" },
+    fmta("\\answeronly{<>}", { i(0) })
+))
+
+-- full teacher/student mode switch block
+table.insert(tex, s(
+    { trig = "flmode", name = "Mode switch comment block" },
+    fmta([[
+%\\teachermode   % uncomment for teacher version
+\\studentmode    % uncomment for student version
+]], {})
+))
+
+
 -- figure
 table.insert(tex, s(
     { trig = "fig", name = "Figure environment" },
